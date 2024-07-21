@@ -1,1 +1,1 @@
-SpreedIt3.0 Is an update to the original spreedit app with Gemini and Firebase included.
+SpreedItx Is an update to the original spreedit app with Gemini and Firebase included.
