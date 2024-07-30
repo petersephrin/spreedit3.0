@@ -1,0 +1,50 @@
+{   "topic": "Plasma Physics",
+    "docs_have_related_topic": true,
+    "books":[
+    {
+      "name": "Is a Plasma Diamagnetic?",
+      "authors": [
+        "W. Engelhardt"
+      ],
+      "publisher": null,
+      "year": null,
+      "edition": null,
+      "type": "Article",
+      "tags": [
+        "Plasma Physics",
+        "Diamagnetism",
+        "Magnetohydrodynamics",
+        "Lorentz Force",
+        "Magnetic Confinement",
+        "Theta Pinch"
+      ],
+      "cover_page": 1
+    },
+    {
+      "name": "Electricity and Magnetism",
+      "authors": [
+        "Edward M. Purcell",
+        "David J. Morin"
+      ],
+      "publisher": "Cambridge University Press",
+      "year": 2013,
+      "edition": "Third Edition",
+      "type": "Book",
+      "tags": [
+        "Electricity",
+        "Magnetism",
+        "Physics",
+        "Electromagnetism",
+        "Electrostatics",
+        "Magnetostatics",
+        "Circuits",
+        "Electromagnetic Waves",
+        "SI Units",
+        "Gaussian Units",
+        "Relativity"
+      ],
+      "cover_page": 3 
+    }
+  ]
+}
+  

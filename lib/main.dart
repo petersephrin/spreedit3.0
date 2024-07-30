@@ -1,7 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:spreedit/prompts/prompts.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 void main() {
+  //syncfusion
+  //Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhBYVZpR2Nbe05zflVEal9VVAciSV9jS3pTcUdqWXxecndRRmVeUg==
   runApp(const MyApp());
 }
 
@@ -29,7 +38,8 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 7, 51, 145)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'SpreedIt'),
@@ -56,11 +66,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  GenerativeModel initGemini() {
+    const apiKey = String.fromEnvironment("GEMINI_KEY",
+        defaultValue: "AIzaSyCidDeDl41iW7A0i9l3hESfq5hfPHcdrLo");
+
+    final model =
+        GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: apiKey);
+    return model;
+  }
+
   void pickFiles() async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: true);
+
     if (result != null) {
-      print("Files picked");
+      String prompt = Prompts.filePickedPrompt;
+      var content = [Content.text(prompt)];
+      for (PlatformFile file in result.files) {
+        print(file.name);
+        if (file.extension == "pdf") {
+          String text = extractPdfText(file.path!);
+          content.add(Content.text(text));
+        } else if (file.extension == "epub") {
+          //extract text from epub
+        } else if (file.extension == "png" ||
+            file.extension == "jpg" ||
+            file.extension == "jpeg") {
+          Uint8List bytes = await File(file.path!).readAsBytes();
+          content.add(Content.data(file.extension!, bytes));
+        }
+      }
+
+      final gemini = initGemini();
+
+      print(content.join("******"));
+      gemini
+          .generateContent(content,
+              generationConfig:
+                  GenerationConfig(responseMimeType: "application/json"))
+          .then((value) => print(value.text));
     }
   }
 
@@ -77,7 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -118,4 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+String extractPdfText(String filepath) {
+  //TODO: Support password input if file requires password
+  PdfDocument document =
+      PdfDocument(inputBytes: File(filepath).readAsBytesSync());
+  String text = PdfTextExtractor(document).extractText();
+  return text;
 }
