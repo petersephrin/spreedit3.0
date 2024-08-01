@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "711533775509",
+    "project_id": "spreeditx",
+    "storage_bucket": "spreeditx.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711533775509:android:8a2ffe390879c42a38e99c",
+        "android_client_info": {
+          "package_name": "com.spreeditx.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfxuchYLhp8uSFgdXLJpCGGZ_tNn2ET6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

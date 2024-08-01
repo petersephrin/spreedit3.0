@@ -1,16 +1,20 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'dart:isolate';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:spreedit/firebase_options.dart';
+import 'package:spreedit/gemini/gemini.dart';
 import 'package:spreedit/prompts/prompts.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 void main() {
   //syncfusion
   //Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhBYVZpR2Nbe05zflVEal9VVAciSV9jS3pTcUdqWXxecndRRmVeUg==
+
   runApp(const MyApp());
 }
 
@@ -38,8 +42,8 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 7, 51, 145)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 7, 51, 145)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'SpreedIt'),
@@ -66,27 +70,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  GenerativeModel initGemini() {
-    const apiKey = String.fromEnvironment("GEMINI_KEY",
-        defaultValue: "AIzaSyCidDeDl41iW7A0i9l3hESfq5hfPHcdrLo");
-
-    final model =
-        GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: apiKey);
-    return model;
+  geminiGenerateContent(List<Content> content) {
+    final gemini = Gemini().init();
+    gemini.generateContent(content).then((value) => debugPrint(value.text));
   }
 
   void pickFiles() async {
     FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
+        await FilePicker.platform.pickFiles(allowMultiple: false);
 
     if (result != null) {
-      String prompt = Prompts.filePickedPrompt;
+      String prompt = Prompts.summaryPrompt;
       var content = [Content.text(prompt)];
       for (PlatformFile file in result.files) {
-        print(file.name);
+        debugPrint(file.name);
         if (file.extension == "pdf") {
-          String text = extractPdfText(file.path!);
-          content.add(Content.text(text));
+          final receivePort = ReceivePort();
+          await Isolate.spawn(extractPdfText,
+              (filePath: file.path!, sendPort: receivePort.sendPort));
+          // String text = extractPdfText(file.path!);
+          receivePort.listen((text) {
+            //debugPrint(text);
+            content.add(Content.text(text));
+            geminiGenerateContent(content);
+          });
         } else if (file.extension == "epub") {
           //extract text from epub
         } else if (file.extension == "png" ||
@@ -96,15 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
           content.add(Content.data(file.extension!, bytes));
         }
       }
-
-      final gemini = initGemini();
-
-      print(content.join("******"));
-      gemini
-          .generateContent(content,
-              generationConfig:
-                  GenerationConfig(responseMimeType: "application/json"))
-          .then((value) => print(value.text));
     }
   }
 
@@ -119,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // Colors.amber, perhaps?) and trigger  hot reload to see the AppBar
         // change color while the other colors stay the same.
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -149,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const Text(
-              'Hint: Open multiple files to study a topic.',
+              'We will help you understand complex topics using ai while you read.',
             ),
           ],
         ),
@@ -163,10 +161,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-String extractPdfText(String filepath) {
+void extractPdfText(({String filePath, SendPort sendPort}) data) {
   //TODO: Support password input if file requires password
   PdfDocument document =
-      PdfDocument(inputBytes: File(filepath).readAsBytesSync());
+      PdfDocument(inputBytes: File(data.filePath).readAsBytesSync());
   String text = PdfTextExtractor(document).extractText();
-  return text;
+  document.dispose();
+  return data.sendPort.send(text);
+}
+
+void uploadToDatabase() async {
+  //init firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }

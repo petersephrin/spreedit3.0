@@ -1,61 +1,77 @@
 class Prompts {
   static const filePickedPrompt =
-      '''Given these documents in text extracted from pdf or epub files ,
-  separated by the words "New Document + FILE NAME", 
-  list a topic that relates all the documents, if they actually have related topic,
-   and for every document list the name (preferably as it appears in the document not just the file name),
+      '''Given this document, list the name (preferably as it appears in the document not just the file name),
     the authors, publisher, year of publishing, edition, type of document e.g. book, paper, article, magazine etc. 
-    ,tags for the document and which page the cover page is in(usually on page 1 but in other documents the cover page is in other areas.The cover page probably has less text except maybe for the title of the book and author.). 
+    ,tags for the document.
     Do this in JSON format like shown below :                                                                                       
-    {   
-    "topic": "Plasma Physics",
-    "docs_have_related_topic": true,
-    "books":[
     {
-      "name": "Is a Plasma Diamagnetic?",
+      "name": "",
       "authors": [
-        "W. Engelhardt"
+        "",
+        ""
       ],
-      "publisher": null,
-      "year": null,
-      "edition": null,
-      "type": "Article",
+      "publisher": "",
+      "year": ,
+      "edition": "",
+      "type": "",
       "tags": [
-        "Plasma Physics",
-        "Diamagnetism",
-        "Magnetohydrodynamics",
-        "Lorentz Force",
-        "Magnetic Confinement",
-        "Theta Pinch"
-      ],
-      "cover_page": 1
-    },
-    {
-      "name": "Electricity and Magnetism",
-      "authors": [
-        "Edward M. Purcell",
-        "David J. Morin"
-      ],
-      "publisher": "Cambridge University Press",
-      "year": 2013,
-      "edition": "Third Edition",
-      "type": "Book",
-      "tags": [
-        "Electricity",
-        "Magnetism",
-        "Physics",
-        "Electromagnetism",
-        "Electrostatics",
-        "Magnetostatics",
-        "Circuits",
-        "Electromagnetic Waves",
-        "SI Units",
-        "Gaussian Units",
-        "Relativity"
-      ],
-      "cover_page": 3 
+        "",
+        "",
+        "",
+      ]
     }
-  ]
-}
   ''';
+
+  static const summaryPrompt = '''
+  What is the main goal of reading this document? 
+  Based on this goal summarize the document keeping only what is relevant to 
+  achieve this goal as a reader and site parts that are skipped and parts that
+  are included in the summary. 
+  Include page numbers for the parts(beginningPage, endingPage, 
+  beginningWordIndex(the index of the first word that is skipped in the beginningPage)
+   and endingWordIndex(the index of the last word that is skipped in the endingPage), 
+   title and description).Skipped parts should also be listed just like the included parts. Format this in JSON like so:
+   {
+  "goal": "",
+  "summary": {
+    "included": [
+      {
+        "beginningPage": ,
+        "endingPage": ,
+        "beginningWordIndex": ,
+        "endingWordIndex": ,
+        "title": "",
+        "description": ""
+      },
+      {
+        "beginningPage": ,
+        "endingPage": ,
+        "beginningWordIndex": ,
+        "endingWordIndex": ,
+        "title": "",
+        "description": ""
+      }
+    ],
+    "skipped": [
+      {
+        "beginningPage": ,
+        "endingPage": ,
+        "beginningWordIndex": ,
+        "endingWordIndex": ,
+        "title": "",
+        "description": ""
+      },
+      {
+        "beginningPage": ,
+        "endingPage": ,
+        "beginningWordIndex": ,
+        "endingWordIndex": ,
+        "title": "",
+        "description": ""
+      },
+    ]
+  }
+}
+   
+   ''';
 }
