@@ -41,6 +41,14 @@ dependencies:
   google_generative_ai: ^0.4.3
   syncfusion_flutter_pdfviewer: ^26.2.7
   firebase_core: ^3.3.0
+  cloud_firestore: 
+    git:
+      url: https://github.com/firebase/flutterfire.git
+      ref: fix/13134
+      path: packages/cloud_firestore/cloud_firestore
+  path_provider: ^2.1.4
+  image: ^4.2.0
+  pdfrx: ^1.0.82
 
 dev_dependencies:
   flutter_test:

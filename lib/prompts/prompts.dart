@@ -1,77 +1,74 @@
 class Prompts {
-  static const filePickedPrompt =
-      '''Given this document, list the name (preferably as it appears in the document not just the file name),
-    the authors, publisher, year of publishing, edition, type of document e.g. book, paper, article, magazine etc. 
-    ,tags for the document.
-    Do this in JSON format like shown below :                                                                                       
-    {
-      "name": "",
-      "authors": [
-        "",
-        ""
-      ],
-      "publisher": "",
-      "year": ,
-      "edition": "",
-      "type": "",
-      "tags": [
-        "",
-        "",
-        "",
-      ]
-    }
+  static const filePickedPrompt = '''
+    Extract the following metadata from the provided text:
+
+* **title:** The title of the document as it appears in the text.
+* **authors:** A list of authors as they appear in the text.
+* **publisher:** The name of the publisher.
+* **publicationDate:** The publication year.
+* **language:** The language of the document.
+* **isbn:** The ISBN number (if available).
+* **edition:** The edition number or description (if available).
+* **fileType:** The document type (e.g., book, article, report, thesis).
+* **tags:** A list of relevant keywords or topics related to the document (maximum 12).
+
+* **description:** Come up with a brief description of the document.
+Output the metadata in JSON format:
+
+{
+  "title": "",
+  "authors": [
+    "",
+    ""
+  ],
+  "publisher": "",
+  "publicationDate": "",
+  "language": "",
+  "description": "",
+  "isbn": "",
+  "edition": "",
+  "fileType": "",
+  "tags": [
+    "",
+    "",
+    ""
+  ]
+}
   ''';
 
   static const summaryPrompt = '''
-  What is the main goal of reading this document? 
-  Based on this goal summarize the document keeping only what is relevant to 
-  achieve this goal as a reader and site parts that are skipped and parts that
-  are included in the summary. 
-  Include page numbers for the parts(beginningPage, endingPage, 
-  beginningWordIndex(the index of the first word that is skipped in the beginningPage)
-   and endingWordIndex(the index of the last word that is skipped in the endingPage), 
-   title and description).Skipped parts should also be listed just like the included parts. Format this in JSON like so:
-   {
+  Identify the primary objective of reading this document(the goal). Based on this objective, generate a concise summary focusing on the most critical information to achieve the goal.
+
+Structure your response in JSON format as follows:
+
+{
   "goal": "",
   "summary": {
     "included": [
       {
-        "beginningPage": ,
-        "endingPage": ,
-        "beginningWordIndex": ,
-        "endingWordIndex": ,
-        "title": "",
-        "description": ""
+        "beginningPage": 1,
+        "endingPage": 3,
+        "beginningWordIndex": 100,
+        "endingWordIndex": 250,
+        "title": "Document Introduction",
+        "description": "Provides essential background information and problem statement."
       },
-      {
-        "beginningPage": ,
-        "endingPage": ,
-        "beginningWordIndex": ,
-        "endingWordIndex": ,
-        "title": "",
-        "description": ""
-      }
+      ...
     ],
     "skipped": [
       {
-        "beginningPage": ,
-        "endingPage": ,
-        "beginningWordIndex": ,
-        "endingWordIndex": ,
-        "title": "",
-        "description": ""
+        "beginningPage": 4,
+        "endingPage": 6,
+        "beginningWordIndex": 0,
+        "endingWordIndex": 1500,
+        "title": "Methodology Details",
+        "description": "In-depth explanation of research methods, not crucial for understanding the main findings."
       },
-      {
-        "beginningPage": ,
-        "endingPage": ,
-        "beginningWordIndex": ,
-        "endingWordIndex": ,
-        "title": "",
-        "description": ""
-      },
+      ...
     ]
   }
 }
-   
+
+Include as many included and skipped sections as necessary to accurately represent the document and its summary.
    ''';
 }
