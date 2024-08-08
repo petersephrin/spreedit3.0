@@ -11,6 +11,8 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:spreedit/gemini/gemini.dart';
 import 'package:spreedit/models/books.dart';
+import 'package:spreedit/pages/read_epub.dart';
+import 'package:spreedit/pages/read_pdf.dart';
 import 'package:spreedit/prompts/prompts.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:pdfrx/pdfrx.dart' as pdfrx;
@@ -180,10 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return SizedBox(
         width: MediaQuery.sizeOf(context).width,
         height: MediaQuery.sizeOf(context).height * 0.8,
-        child: StreamBuilder<QuerySnapshot>(
+        child: StreamBuilder(
           stream: _booksDBService.getBooks(),
           builder: (context, snapshot) {
-            List books = snapshot.data?.docs ?? [];
+            List<Book> books =
+                snapshot.data!.docs.map((doc) => doc.data() as Book).toList();
             if (books.isEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +203,69 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             } else {
               debugPrint(books.length.toString());
-              return ListView();
+              return GridView.count(
+                crossAxisCount: 4,
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+                childAspectRatio: 27 / 35,
+                children: [
+                  for (Book book in books)
+                    InkWell(
+                      onTap: () {
+                        if (book.fileType == "epub") {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReadEpub(book: book),
+                              ));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReadPdf(book: book),
+                              ));
+                        }
+                      },
+                      child: Hero(
+                        tag: book.title!,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(children: <Widget>[
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: book.coverImage!.isEmpty
+                                        ? const AssetImage(
+                                                'images/blankbookcover.png')
+                                            as ImageProvider
+                                        : FileImage(File(book.coverImage!)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                height: 80.0,
+                                child: book.coverImage!.isEmpty
+                                    ? Text(
+                                        book.title!,
+                                        style:
+                                            TextStyle(fontSize: 20, shadows: [
+                                          Shadow(
+                                            color:
+                                                Colors.black.withOpacity(0.3),
+                                            offset: const Offset(0.4, 0.4),
+                                            blurRadius: 0.5,
+                                          ),
+                                        ]),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                ],
+              );
             }
           },
         ));
