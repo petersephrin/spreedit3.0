@@ -60,7 +60,9 @@ class _ReadLobbyState extends State<ReadLobby> {
                 padding: const EdgeInsets.all(18.0),
                 child: ButtonTheme(
                   child: ActionChip.elevated(
-                    backgroundColor: const Color.fromARGB(239, 204, 55, 55),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                    backgroundColor: Theme.of(context).primaryColor,
                     label: const Text("Read"),
                     onPressed: () {
                       if (widget.book.fileType! == "epub") {
