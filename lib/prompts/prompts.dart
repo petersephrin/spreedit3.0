@@ -69,6 +69,7 @@ Structure your response in JSON format as follows:
   }
 }
 
-Include as many included and skipped sections as necessary to accurately represent the document and its summary.
+Include all the parts that should not be skipped in the  included section and as many skipped sections as necessary to save time in reading the document and to accurately represent the document and its summary.
+Note that a page can not be in both included and skipped.
    ''';
 }

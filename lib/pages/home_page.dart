@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:spreedit/gemini/gemini.dart';
 import 'package:spreedit/models/books.dart';
 import 'package:spreedit/pages/read_epub.dart';
+import 'package:spreedit/pages/read_lobby.dart';
 import 'package:spreedit/pages/read_pdf.dart';
 import 'package:spreedit/prompts/prompts.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -32,12 +33,21 @@ class _MyHomePageState extends State<MyHomePage> {
   var startMessage = 'Open a pdf or epub file to start.';
   var startMessageDesc =
       'Let AI help you read faster and understand complex topics easily';
+  bool addingBook = false;
 
   Future<GenerateContentResponse> geminiGenerateContent(
       List<Content> content) async {
     final gemini = Gemini().init();
     var gResponse = await gemini.generateContent(content);
     return gResponse;
+  }
+
+  void showProgressSnack() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Column(
+          children: [Text(startMessage), Text(startMessageDesc)],
+        )));
   }
 
   void pickFiles() async {
@@ -54,9 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
       for (PlatformFile file in result.files) {
         debugPrint(file.name);
         String filename = file.name;
+
         setState(() {
-          startMessage = "Opening $filename";
+          startMessage = "Adding $filename";
         });
+        showProgressSnack();
         var filepath = file.path!;
         var fileextension = file.extension!;
         if (fileextension == "pdf") {
@@ -64,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             startMessageDesc = "Extracting text from pdf";
           });
+          showProgressSnack();
           await Isolate.spawn(extractPdfText,
               (filePath: file.path!, sendPort: receivePort.sendPort));
           // String text = extractPdfText(file.path!);
@@ -73,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               startMessageDesc = "Extracting metadata from file";
             });
+            showProgressSnack();
             var gResponse = await geminiGenerateContent(fcontent);
             debugPrint(gResponse.text);
             Book book = Book.fromJson(jsonDecode(gResponse.text!));
@@ -81,10 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               startMessageDesc = "Creating a spreedit summary for you";
             });
+            showProgressSnack();
 
             setState(() {
               startMessageDesc = "Adding file to database";
             });
+            showProgressSnack();
             var sResponse = await geminiGenerateContent(scontent);
             debugPrint(sResponse.text);
 
@@ -222,42 +238,45 @@ class _MyHomePageState extends State<MyHomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ReadPdf(book: book),
+                                builder: (context) => ReadLobby(book: book),
                               ));
                         }
                       },
                       child: Hero(
-                        tag: book.title!,
+                        tag: book.title ?? "title${book.coverImage}",
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Stack(children: <Widget>[
                             Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: book.coverImage!.isEmpty
-                                        ? const AssetImage(
-                                                'images/blankbookcover.png')
-                                            as ImageProvider
-                                        : FileImage(File(book.coverImage!)),
-                                    fit: BoxFit.cover,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: book.coverImage!.isEmpty
+                                          ? const AssetImage(
+                                                  'images/blankbookcover.png')
+                                              as ImageProvider
+                                          : FileImage(File(book.coverImage!)),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
+                                  height: 80.0,
+                                  child: book.coverImage!.isEmpty
+                                      ? Text(
+                                          book.title!,
+                                          style:
+                                              TextStyle(fontSize: 20, shadows: [
+                                            Shadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              offset: const Offset(0.4, 0.4),
+                                              blurRadius: 0.5,
+                                            ),
+                                          ]),
+                                        )
+                                      : const SizedBox.shrink(),
                                 ),
-                                height: 80.0,
-                                child: book.coverImage!.isEmpty
-                                    ? Text(
-                                        book.title!,
-                                        style:
-                                            TextStyle(fontSize: 20, shadows: [
-                                          Shadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            offset: const Offset(0.4, 0.4),
-                                            blurRadius: 0.5,
-                                          ),
-                                        ]),
-                                      )
-                                    : const SizedBox.shrink(),
                               ),
                             ),
                           ]),
@@ -276,7 +295,13 @@ void extractPdfText(({String filePath, SendPort sendPort}) data) {
   //TODO: Support password input if file requires password
   PdfDocument document =
       PdfDocument(inputBytes: File(data.filePath).readAsBytesSync());
-  String text = PdfTextExtractor(document).extractText();
+  int numberOfPages = document.pages.count;
+  String text = "";
+  for (int n = 0; n < numberOfPages; n++) {
+    String pageText = PdfTextExtractor(document).extractText(startPageIndex: n);
+    text += "Page {$n}: $pageText";
+  }
+  //String text = PdfTextExtractor(document).extractText();
   document.dispose();
   return data.sendPort.send(text);
 }

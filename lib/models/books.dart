@@ -102,6 +102,7 @@ class SkipInclude {
   int? beginningWordIndex;
   int? endingPage;
   int? endingWordIndex;
+  String? title;
   String? description;
 
   SkipInclude.fromJson(Map<String, Object?> json) {
@@ -109,6 +110,7 @@ class SkipInclude {
     beginningWordIndex = json['beginningWordIndex'] as int?;
     endingPage = json['endingPage'] as int?;
     endingWordIndex = json['endingWordIndex'] as int?;
+    title = json['title'] as String?;
     description = json['description'] as String?;
   }
 
@@ -118,6 +120,7 @@ class SkipInclude {
       'beginningWordIndex': beginningWordIndex,
       'endingPage': endingPage,
       'endingWordIndex': endingWordIndex,
+      'title': title,
       'description': description,
     };
   }

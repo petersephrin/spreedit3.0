@@ -38,19 +38,31 @@ class _ReadPdfState extends State<ReadPdf> {
 
   viewerOverlayBuilder(
       BuildContext context, Size size, Function handleLinkTap) {
-    return [
-      SearchBar(
-        leading: IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            debugPrint("Search");
-          },
-        ),
-      ),
-    ];
+    List<Widget> widgets = [];
+    return widgets;
+  }
+
+  (bool isSkipped, SkipInclude skippedInclude) isPageSkipped(int pageNumber) {
+    List<SkipInclude> skippedIncludes = widget.book.skippedskipIncludes ?? [];
+    SkipInclude emptySkipInclude = SkipInclude.fromJson(<String, dynamic>{});
+    if (skippedIncludes.isEmpty) {
+      return (false, emptySkipInclude);
+    }
+    for (SkipInclude skipped in skippedIncludes) {
+      int? lPointer = skipped.beginningPage;
+      int? rPointer = skipped.endingPage;
+      if (lPointer == null || rPointer == null) {
+        continue;
+      }
+      if (pageNumber >= lPointer && pageNumber <= rPointer) {
+        return (true, skipped);
+      }
+    }
+    return (false, emptySkipInclude);
   }
 
   pageOverlayBuilder(BuildContext context, Rect pageRect, PdfPage page) {
+    var (isSkipped, skipped) = isPageSkipped(page.pageNumber);
     return [
       // SizedBox(
       //   height: 800,
@@ -61,11 +73,21 @@ class _ReadPdfState extends State<ReadPdf> {
       // ),
       Align(
         alignment: Alignment.center,
-        child: (page.pageNumber == 2)
-            ? BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Text(page.pageNumber.toString(),
-                    style: const TextStyle(color: Colors.red)),
+        child: isSkipped
+            ? ClipRRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: SizedBox(
+                      height: page.height,
+                      width: page.width,
+                      child: Text(
+                          "${skipped.description}/n Page :${skipped.beginningPage!}End Page:${skipped.endingPage!}",
+                          style: const TextStyle(color: Colors.red)),
+                    ),
+                  ),
+                ),
               )
             : Text(page.pageNumber.toString(),
                 style: const TextStyle(color: Colors.red)),
