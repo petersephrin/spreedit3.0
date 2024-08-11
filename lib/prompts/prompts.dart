@@ -35,9 +35,12 @@ Output the metadata in JSON format:
   ]
 }
   ''';
-
-  static const summaryPrompt = '''
-  Identify the primary objective of reading this document(the goal). Based on this objective, generate a concise summary focusing on the most critical information to achieve the goal.
+  static const summaryPrompt =
+      "Identify the primary objective of reading this document(the goal). $sPrompt";
+  static const summaryPromptWithGoal =
+      "The objective of reading this document is ";
+  static const sPrompt = '''
+  Based on this objective, generate a concise summary focusing on the most critical information to achieve the goal.
 
 Structure your response in JSON format as follows:
 

@@ -83,8 +83,10 @@ class _ReadPdfState extends State<ReadPdf> {
                       height: page.height,
                       width: page.width,
                       child: Text(
-                          "${skipped.description}/n Page :${skipped.beginningPage!}End Page:${skipped.endingPage!}",
-                          style: const TextStyle(color: Colors.red)),
+                          "${skipped.description} Page :${skipped.beginningPage!}End Page:${skipped.endingPage!}",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromARGB(255, 0, 0, 0))),
                     ),
                   ),
                 ),

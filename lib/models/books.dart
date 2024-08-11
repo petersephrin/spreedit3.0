@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Book {
+  String? id;
   String? title;
   List<String>? authors;
   List<String>? tags;
@@ -30,6 +31,7 @@ class Book {
   Timestamp? deletedAt;
 
   Book.fromJson(Map<String, Object?> json) {
+    id = json['id'] as String?;
     title = json['title'] as String?;
     authors = (json['authors'] as List?)?.map((e) => e as String).toList();
     tags = (json['tags'] as List?)?.map((e) => e as String).toList();
@@ -64,6 +66,7 @@ class Book {
   }
   Map<String, Object?> toJson() {
     return {
+      'id': id,
       'title': title,
       'authors': authors,
       'tags': tags,
@@ -144,6 +147,13 @@ class BooksDBService {
   }
 
   void addBook(Book book) {
-    _booksRef.add(book);
+    _booksRef.add(book).then((docRef) {
+      book.id = docRef.id;
+      updateBook(docRef.id, book);
+    });
+  }
+
+  void updateBook(String bookID, Book book) {
+    _booksRef.doc(bookID).update(book.toJson());
   }
 }

@@ -125,6 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
             book.filePath = filepath;
             book.createdAt = Timestamp.now();
             book.updatedAt = Timestamp.now();
+            //can't do this because the content can be larger than a doc for firebase. need to extraxt text over when doing change goal
+            //book.fileContent = text;
 
             //get image of first page
             final docRendered = await pdfrx.PdfDocument.openFile(filepath);
@@ -291,17 +293,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-void extractPdfText(({String filePath, SendPort sendPort}) data) {
+Future<void> extractPdfText(({String filePath, SendPort sendPort}) data) async {
   //TODO: Support password input if file requires password
   PdfDocument document =
       PdfDocument(inputBytes: File(data.filePath).readAsBytesSync());
   int numberOfPages = document.pages.count;
-  String text = "";
+
+  // Create a list of futures to extract text from each page
+  List<Future<String>> pageTextFutures = [];
   for (int n = 0; n < numberOfPages; n++) {
-    String pageText = PdfTextExtractor(document).extractText(startPageIndex: n);
-    text += "Page {$n}: $pageText";
+    // Wrap the extractText call in a Future.value to create a Future<String>
+    pageTextFutures.add(Future.value(
+        PdfTextExtractor(document).extractText(startPageIndex: n)));
   }
-  //String text = PdfTextExtractor(document).extractText();
+
+  // Use Future.wait to execute all page text extraction futures concurrently
+  List<String> pageTexts = await Future.wait(pageTextFutures);
+
+  // Concatenate the extracted text from each page
+  String text = pageTexts.join("\n");
+
   document.dispose();
   return data.sendPort.send(text);
 }
