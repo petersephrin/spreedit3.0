@@ -1,1 +1,1 @@
-SpreedIt3.0 Is an update to the original spreedit app with Gemini and Firebase included.
+SpreedIt is an application made in Flutter using Gemini and Firebase, meant to help readers read only parts of a document that are relevant based on a goal they might have.This is meant to help you read faster and understand concepts better. Gemini does the heavy lifting for you. 
