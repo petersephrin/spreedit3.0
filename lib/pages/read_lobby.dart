@@ -177,6 +177,25 @@ class _ReadLobbyState extends State<ReadLobby> {
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 ...widget.book.skippedskipIncludes!.map((skipped) => Card(
                         child: ListTile(
+                      onTap: () {
+                        if (widget.book.fileType! == "epub") {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReadPdf(
+                                    book: widget.book,
+                                    targetPage: skipped.beginningPage),
+                              ));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReadPdf(
+                                    book: widget.book,
+                                    targetPage: skipped.beginningPage),
+                              ));
+                        }
+                      },
                       title: Text(skipped.title ?? ""),
                       subtitle: Text(skipped.description ?? ""),
                       trailing: Text(

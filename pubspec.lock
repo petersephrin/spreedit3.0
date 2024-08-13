@@ -76,28 +76,27 @@ packages:
   cloud_firestore:
     dependency: "direct main"
     description:
-      path: "packages/cloud_firestore/cloud_firestore"
-      ref: "fix/13134"
-      resolved-ref: a231b78eae5a9196344905de4cb72df8bc7b961e
-      url: "https://github.com/firebase/flutterfire.git"
-    source: git
-    version: "5.2.0"
+      name: cloud_firestore
+      sha256: a31eec60eadaa859f0677bf661d9f86ed15961c716512f64884e59edcb341472
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
-      sha256: "4ea584875e9c192559a21a8198727ad333b2b85b22af8ca2fa8b0b112de069dc"
+      sha256: "3224e6158441c8897325e74f9971140cde2c85ee75a26704407a91b969b50829"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.3.1"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
-      sha256: "530066aa006b7d23e4cd8312d08cef996f80e6cbb0f1c2e7256b5fa200404127"
+      sha256: c1312945cb7dd55921bcc10445f6c9a494bc04104b7d0821c3ed577b970ab088
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   collection:
     dependency: transitive
     description:
@@ -142,10 +141,10 @@ packages:
     dependency: transitive
     description:
       name: device_info_plus
-      sha256: "93429694c9253d2871b3af80cf11b3cbb5c65660d402ed7bf69854ce4a089f82"
+      sha256: a7fd703482b391a87d60b6061d04dfdeab07826b96f9abd8f5ed98068acc0074
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.1"
+    version: "10.1.2"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -166,10 +165,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
+      sha256: "16ed7b077ef01ad6170a3d0c57caa4a112a38d7a2ed5602e0aca9ca6f3d98da6"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   file:
     dependency: transitive
     description:
@@ -182,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "824f5b9f389bfc4dddac3dea76cd70c51092d9dff0b2ece7ef4f53db8547d258"
+      sha256: "825aec673606875c33cd8d3c4083f1a3c3999015a84178b317b7ef396b7384f3"
       url: "https://pub.dev"
     source: hosted
-    version: "8.0.6"
+    version: "8.0.7"
   firebase_core:
     dependency: "direct main"
     description:
@@ -210,6 +209,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.17.4"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      sha256: "9c837ed303aea5fb7d1f4ad097f6ab092310c33af9cd290e738c65670f3ce7f1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.1.3"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      sha256: "889db34d0369f7c0f3b40af058d6e1ea5a6622e0a4592483bf5923327071f5d0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.27"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      sha256: "95aeed3265f5aacee98f8ede842bae5b34360fe8a5f09b2a811688f3ac7f7c99"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.12"
   fixnum:
     dependency: transitive
     description:
@@ -389,10 +412,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "490539678396d4c3c0b06efdaab75ae60675c3e0c66f72bc04c2e2c1e0e2abeb"
+      sha256: "6f01f8e37ec30b07bc424b4deabac37cacb1bc7e2e515ad74486039918a37eb7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.9"
+    version: "2.2.10"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -514,66 +537,66 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: fd4d2cdbf8d0d1e3441817cb8a03f896566fad5187788957e78492fe16800388
+      sha256: "24d7f43ff33bd6248c95d8b3312f6b9fe89637727ca778d60490b81ebd5bd8e7"
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_flutter_pdf:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_pdf
-      sha256: e9b449989f4f5b34d56a1f7b6df2843b4ed116c9c7a77947874e2199ff91b217
+      sha256: "73dc0866ceadf0bc72e90a8c4448f54c7d0f8e13ee7d7c332004c108641a3e26"
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_flutter_pdfviewer:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_pdfviewer
-      sha256: "995b382f8ff0651eba94d969354d0bb4ce5f97af2748c3ebfa798ac9e4cd028e"
+      sha256: "3454dadf1155497dbf89af11798134f94c91dd3f247369fa41a38cff240e80ab"
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_flutter_signaturepad:
     dependency: transitive
     description:
       name: syncfusion_flutter_signaturepad
-      sha256: "825eb0ac42c1c28b007b6faf14e517f996ecd929925fc0e108980cb4de574fdb"
+      sha256: "8bd103c6d919de40085c953273bf50d5a67634b09d0869aa5a0c2688679f8e6c"
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_pdfviewer_macos:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_macos
-      sha256: bf9632041aa573bee6485c02f12ae37018a7af8e355e29b91885ff04b5a7bd6e
+      sha256: d1ae392e755cd767423479354989c0f76c8cce0338c5a79a7d074a357835c04e
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_pdfviewer_platform_interface:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_platform_interface
-      sha256: "5291e6ebbce6135f29dfe941015cb4d659cbab14b52aed26beec366488692d97"
+      sha256: e472a355123c66171d5338fa96da6a05b65af8ca2af4fc4b13cb1f728e53f27b
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_pdfviewer_web:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_web
-      sha256: "151845f397fbd004f002e7983d9b011ac8448ba21f79692c358d4b38602d8055"
+      sha256: "4e727110f718484107f906754215910e7da9c38eb84485dc1de4c30059ac5491"
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   syncfusion_pdfviewer_windows:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_windows
-      sha256: "373c9b577059381d2f69d608f79e8ebce5b629e41da11423eac566aeba01739b"
+      sha256: c31f9f6a63a7858270573b6d4ec42263e63571268c85655a4d6f8e4a265cdf4a
       url: "https://pub.dev"
     source: hosted
-    version: "26.2.7"
+    version: "26.2.9"
   synchronized:
     dependency: transitive
     description:
@@ -634,10 +657,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_linux
-      sha256: ab360eb661f8879369acac07b6bb3ff09d9471155357da8443fd5d3cf7363811
+      sha256: e2b9622b4007f97f504cd64c0128309dfb978ae66adbe944125ed9e1750f06af
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "3.2.0"
   url_launcher_macos:
     dependency: transitive
     description:
@@ -658,10 +681,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_web
-      sha256: a36e2d7981122fa185006b216eb6b5b97ede3f9a54b7a511bc966971ab98d049
+      sha256: "772638d3b34c779ede05ba3d38af34657a05ac55b06279ea6edd409e323dca8e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.3"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -706,10 +729,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "015002c060f1ae9f41a818f2d5640389cc05283e368be19dc8d77cecb43c40c9"
+      sha256: "68d1e89a91ed61ad9c370f9f8b6effed9ae5e0ede22a270bdfa6daf79fc2290a"
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.3"
+    version: "5.5.4"
   win32_registry:
     dependency: transitive
     description:
