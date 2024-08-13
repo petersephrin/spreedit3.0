@@ -39,7 +39,7 @@ class _ReadLobbyState extends State<ReadLobby> {
               flexibleSpace: FlexibleSpaceBar(
                 background: Hero(
                     tag: widget.book.title ?? "title${widget.book.coverImage}",
-                    child: Image.file(File(widget.book.coverImage!))),
+                    child: Image.network(widget.book.coverImage!)),
               ),
               actions: [
                 Padding(

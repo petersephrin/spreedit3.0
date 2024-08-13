@@ -23,8 +23,8 @@ class _ReadPdfState extends State<ReadPdf> {
       ),
       body: Hero(
         tag: widget.book.title!,
-        child: PdfViewer.file(
-          widget.book.filePath!,
+        child: PdfViewer.uri(
+          Uri.parse(widget.book.filePath!),
           params: PdfViewerParams(
             enableTextSelection: true,
             viewerOverlayBuilder: (context, size, handleLinkTap) =>
