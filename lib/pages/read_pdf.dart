@@ -5,9 +5,10 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:spreedit/models/books.dart';
 
 class ReadPdf extends StatefulWidget {
-  const ReadPdf({super.key, required this.book});
+  const ReadPdf({super.key, required this.book, this.targetPage});
 
   final Book book;
+  final int? targetPage;
   @override
   State<ReadPdf> createState() => _ReadPdfState();
 }
@@ -31,6 +32,7 @@ class _ReadPdfState extends State<ReadPdf> {
             pageOverlaysBuilder: (context, pageRect, page) =>
                 pageOverlayBuilder(context, pageRect, page),
           ),
+          initialPageNumber: widget.targetPage ?? 0,
         ),
       ),
     ));
